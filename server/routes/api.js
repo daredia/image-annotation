@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
 var basicAuth = require('basic-auth');
+var validUrl = require('valid-url');
 var Task = require('../db');
 
 var auth = function(req, res, next) {
@@ -30,6 +31,20 @@ router.route('/annotation')
 
   .post(function(req, res) {
     var task = new Task(req.body);
+    
+    if (task.attachment_type !== 'image') {
+      return res.sendStatus(400);
+    }
+
+    if (!(validUrl.isUri(task.attachment) && validUrl.isUri(task.callback_url))) {
+      return res.sendStatus(400);
+    }
+    
+    task.objects_to_annotate = task.objects_to_annotate.replace(/\'/g, '"');
+    if (!Array.isArray(JSON.parse(task.objects_to_annotate))) {
+      return res.sendStatus(400);
+    }
+
     task.save(function(err, task) {
       (err) ? res.send(err) : res.status(200).json(task);
     });
