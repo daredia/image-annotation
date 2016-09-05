@@ -2,8 +2,9 @@
   "name": "image-annotation",
   "version": "1.0.0",
   "description": "Image annotation endpoint for Scale",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
+    "start": "nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shehzad Daredia",
