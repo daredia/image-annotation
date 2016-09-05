@@ -6,11 +6,10 @@ var TaskSchema = new Schema({
   instruction: String,
   attachment: String,
   attachment_type: String,
-  objects_to_annotate: [],
+  objects_to_annotate: String,
   with_labels: Boolean,
   callback_url: String,
-  status: String, // values: pending, completed
-  type: String, // values: annotation
+  status: {type: String, default: 'pending'}, // values: pending, completed
   completed_at: Date
 },
   {

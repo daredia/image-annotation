@@ -1,14 +1,19 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
-var db = require('../db');
+var Task = require('../db');
 
-router.get('/annotation', function(req, res) {
-  res.send('Welcome to the annotation endpoint');
-});
-
-router.post('/annotation', function(req, res) {
-  res.status(200).json(req.body);
+router.route('/annotation')
+.get(function(req, res) {
+  Task.find(function(err, tasks) {
+    (err) ? res.send(err) : res.json(tasks);
+  });
+})
+.post(function(req, res) {
+  var task = new Task(req.body);
+  task.save(function(err, task) {
+    (err) ? res.send(err) : res.status(200).json(task);
+  });
 });
 
 module.exports = router;
