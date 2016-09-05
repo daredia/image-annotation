@@ -1,5 +1,5 @@
 {
-  "name": "image-annotation",
+  "name": "scale-image-annotation",
   "version": "1.0.0",
   "description": "Image annotation endpoint for Scale",
   "main": "server/index.js",
