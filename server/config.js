@@ -3,6 +3,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 
+var routes = require('./routes/index');
+var api = require('./routes/api');
+
 var app = express();
 
 // CONFIGURATION ====================================
@@ -10,5 +13,9 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../client'));
+
+// ROUTES ===========================================
+app.use('/', routes);
+app.use('/v1/task', api);
 
 module.exports = app;
