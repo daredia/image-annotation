@@ -1,6 +1,4 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var router = express.Router();
+var router = require('express').Router();
 var basicAuth = require('basic-auth');
 var validUrl = require('valid-url');
 var Task = require('../db');

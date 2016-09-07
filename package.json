@@ -4,7 +4,7 @@
   "description": "Image annotation endpoint for Scale",
   "main": "server/index.js",
   "scripts": {
-    "start": "nodemon server/index.js",
+    "start": "mongod & nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shehzad Daredia",
