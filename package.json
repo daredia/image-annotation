@@ -4,20 +4,27 @@
   "description": "Image annotation endpoint for Scale",
   "main": "server/index.js",
   "scripts": {
-    "start": "mongod & nodemon server/index.js",
+    "start": "watchify -t [ babelify --presets [ es2015 react ] ] client/index.js -o client/bundle.js & live-server --open='/client' & mongod & nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shehzad Daredia",
   "license": "ISC",
   "dependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "babelify": "^7.3.0",
     "basic-auth": "^1.0.4",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "mongoose": "^4.6.0",
     "morgan": "^1.7.0",
-    "valid-url": "^1.0.9"
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "valid-url": "^1.0.9",
+    "watchify": "^3.7.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
     "nodemon": "^1.10.2"
   }
 }
