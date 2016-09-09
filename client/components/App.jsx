@@ -15,10 +15,14 @@ export default class App extends React.Component {
         username: 'my_api_key'
       }
     })
-    .then((res) => console.log(res));
+    .then((res) => {
+      console.log(res);
+      this.setState({ image: res.data[0].attachment })
+    });
   }
 
   createAnnotator() {
+    $('.image_frame').remove();
     var editor = new BBoxAnnotator({
       url: this.state.image,
       onchange: function(annotation) {
