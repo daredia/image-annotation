@@ -1,24 +1,10 @@
 var router = require('express').Router();
-var basicAuth = require('basic-auth');
 var validUrl = require('valid-url');
 var Task = require('../db');
+var middleware = require('../middleware');
 
-var auth = function(req, res, next) {
-  var unauthorized = function(res) {
-    res.set('WWW_Authenticate', 'Basic realm=Authorization Required');
-    return res.sendStatus(401);
-  };
-
-  var user = basicAuth(req);
-
-  if (!user || !user.name) {
-    return unauthorized(res);
-  }
-
-  return (user.name === 'my_api_key') ? next() : unauthorized(res);
-};
-
-router.use(auth);
+router.use(middleware.allowCrossDomain);
+router.use(middleware.auth);
 
 router.route('/annotation')
   .get(function(req, res) {
