@@ -8,7 +8,9 @@ export default class App extends React.Component {
       url: "http://i.imgur.com/trsL3fU.jpg",
       onchange: function(annotation) {
         $("#annotation_data").val(JSON.stringify(annotation));
-      }
+      },
+      input_method: 'select',
+      labels: ['girl', 'IE man']
     });
 
   }

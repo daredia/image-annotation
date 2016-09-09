@@ -170,13 +170,13 @@
         options.width || (options.width = image_element.width);
         options.height || (options.height = image_element.height);
         annotator.annotator_element.css({
-          "width": (options.width + annotator.border_width * 2) + 'px',
           "height": (options.height + annotator.border_width * 2) + 'px',
           "cursor": "crosshair"
         });
         annotator.image_frame.css({
           "background-image": "url('" + image_element.src + "')",
-          "width": options.width + "px",
+          "background-size": "contain",
+          "background-repeat": "no-repeat",
           "height": options.height + "px",
           "position": "relative"
         });
