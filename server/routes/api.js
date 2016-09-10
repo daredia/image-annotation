@@ -8,7 +8,7 @@ router.use(middleware.auth);
 
 router.route('/annotation')
   .get(function(req, res) {
-    Task.find(function(err, tasks) {
+    Task.find({ status: 'pending' }, function(err, tasks) {
       (err) ? res.send(err) : res.status(200).json(tasks);
     });
   })
@@ -32,6 +32,17 @@ router.route('/annotation')
     task.save(function(err, task) {
       (err) ? res.send(err) : res.status(200).json(task);
     });
+  }
+);
+
+router.route('/annotation/:id')
+  .put(function(req, res) {
+    Task.update({ _id: req.params.id }, 
+      { $set: { status: 'completed' } },
+      function(err, raw) {
+        (err) ? res.send(err) : res.sendStatus(200);
+      }
+    );
   }
 );
 

@@ -30,10 +30,11 @@ export default class App extends React.Component {
       if (res.data.length) {
         this.setState({ tasks: res.data, image: res.data[0].attachment });
       } else {
-        this.setState({ image: doneImage });
+        this.setState({ tasks: res.data, image: doneImage });
       }
       this.updateImage();
-    });
+    })
+    .catch((err) => console.log(err));
   }
 
   updateImage(image, tasks) {
@@ -59,25 +60,41 @@ export default class App extends React.Component {
   }
 
   handleSubmit(e) {
-    // on submit, need to issue PUT request and update the task in db to completed (if value is not empty array)
-    // then POST the callbackurl
-    // unshift the array and if there are none left, GET more tasks from server
+    // POST the callbackurl
     e.preventDefault(e);
-    console.log('handleSubmit called:', this.state.annotation);
-    let tasks = this.state.tasks.splice(1);
-    let image;
-    if (tasks.length) {
-      image = tasks[0].attachment;
+    if (this.state.annotation && this.state.annotation !== '[]') {
+      console.log('handleSubmit called:', this.state.annotation);
 
-      this.setState({
-        annotation: '',
-        image: image,
-        tasks: tasks
-      });
+      let url = 'http://localhost:4567/v1/task/annotation/';
+      url += this.state.tasks[0]._id;
 
-      this.updateImage(image, tasks);
-    } else {
-      this.fetchTasks();
+      axios.put(url, {
+        annotation: this.state.annotation
+      }, {
+        auth: {
+          username: 'my_api_key'
+        }
+      })
+      .then((res) => {
+        console.log('res:', res);
+        let tasks = this.state.tasks.splice(1);
+        let image;
+        if (tasks.length) {
+          image = tasks[0].attachment;
+
+          this.setState({
+            annotation: '',
+            image: image,
+            tasks: tasks
+          });
+
+          this.updateImage(image, tasks);
+        } else {
+          this.setState({ annotation: '' });
+          this.fetchTasks();
+        }
+      })
+      .catch((err) => console.log(err));
     }
   }
 
