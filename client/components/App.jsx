@@ -5,12 +5,18 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      tasks: [],
       image: "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif",
       annotation: ''
     };
   }
 
   componentDidMount() {
+    this.updateImage();
+    this.fetchTasks();
+  }
+
+  fetchTasks() {
     axios.get('http://localhost:4567/v1/task/annotation', {
       auth: {
         username: 'my_api_key'
@@ -18,15 +24,21 @@ export default class App extends React.Component {
     })
     .then((res) => {
       console.log(res);
-      this.setState({ image: res.data[0].attachment })
-      this.createAnnotator();
+      if (res.data.length) {
+        this.setState({ tasks: res.data, image: res.data[0].attachment });
+      } else {
+        this.setState({ image: 'http://actusperformance.com/wp-content/uploads/2015/06/ID-100288828_DONE.jpg' });
+      }
+      this.updateImage();
     });
   }
 
-  createAnnotator() {
+  updateImage() {
     $('.image_frame').remove();
+    var labels = (this.state.tasks.length) ? this.state.tasks[0].objects_to_annotate : '[]'
     var that = this;
-    var editor = new BBoxAnnotator({
+    
+    var options = {
       url: this.state.image,
       onchange: function(annotation) {
         that.setState({
@@ -34,8 +46,10 @@ export default class App extends React.Component {
         });
       },
       input_method: 'select',
-      labels: ['girl', 'IE man']
-    });
+      labels: JSON.parse(labels)
+    };
+    
+    var editor = new BBoxAnnotator(options);
   }
 
   handleSubmit(e) {
@@ -45,8 +59,11 @@ export default class App extends React.Component {
     e.preventDefault(e);
     console.log('handleSubmit called:', this.state.annotation);
     this.setState({
-      annotation: ''
-    })
+      annotation: '',
+      image: this.state.tasks[1],
+      tasks: this.state.tasks.slice(1)
+    });
+    this.updateImage();
   }
 
   render() {

@@ -1,7 +1,7 @@
 {
-  "name": "scale-image-annotation",
+  "name": "image-annotation",
   "version": "1.0.0",
-  "description": "Image annotation endpoint for Scale",
+  "description": "Image annotation endpoint and admin panel",
   "main": "server/index.js",
   "scripts": {
     "start": "watchify -t [ babelify --presets [ es2015 react ] ] client/index.js -o client/bundle.js & live-server --open='/client' & mongod & nodemon server/index.js",

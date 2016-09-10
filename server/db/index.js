@@ -17,7 +17,7 @@ var TaskSchema = new Schema({
   }
 );
 
-mongoose.connect('mongodb://localhost/scale-image-annotation');
+mongoose.connect('mongodb://localhost/image-annotation');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error'));
 db.once('open', function() {
