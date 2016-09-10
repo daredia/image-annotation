@@ -1,12 +1,15 @@
 import React from 'react';
 import axios from 'axios';
 
+const loadingImage = "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif";
+const doneImage = 'http://actusperformance.com/wp-content/uploads/2015/06/ID-100288828_DONE.jpg';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       tasks: [],
-      image: "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif",
+      image: loadingImage,
       annotation: ''
     };
   }
@@ -27,19 +30,22 @@ export default class App extends React.Component {
       if (res.data.length) {
         this.setState({ tasks: res.data, image: res.data[0].attachment });
       } else {
-        this.setState({ image: 'http://actusperformance.com/wp-content/uploads/2015/06/ID-100288828_DONE.jpg' });
+        this.setState({ image: doneImage });
       }
       this.updateImage();
     });
   }
 
-  updateImage() {
+  updateImage(image, tasks) {
+    image = image || this.state.image;
+    tasks = tasks || this.state.tasks;
+
     $('.image_frame').remove();
-    var labels = (this.state.tasks.length) ? this.state.tasks[0].objects_to_annotate : '[]'
-    var that = this;
+    let labels = (tasks.length) ? tasks[0].objects_to_annotate : '[]'
+    let that = this;
     
-    var options = {
-      url: this.state.image,
+    let options = {
+      url: image,
       onchange: function(annotation) {
         that.setState({
           annotation: JSON.stringify(annotation)
@@ -49,7 +55,7 @@ export default class App extends React.Component {
       labels: JSON.parse(labels)
     };
     
-    var editor = new BBoxAnnotator(options);
+    let editor = new BBoxAnnotator(options);
   }
 
   handleSubmit(e) {
@@ -58,12 +64,21 @@ export default class App extends React.Component {
     // unshift the array and if there are none left, GET more tasks from server
     e.preventDefault(e);
     console.log('handleSubmit called:', this.state.annotation);
-    this.setState({
-      annotation: '',
-      image: this.state.tasks[1],
-      tasks: this.state.tasks.slice(1)
-    });
-    this.updateImage();
+    let tasks = this.state.tasks.splice(1);
+    let image;
+    if (tasks.length) {
+      image = tasks[0].attachment;
+
+      this.setState({
+        annotation: '',
+        image: image,
+        tasks: tasks
+      });
+
+      this.updateImage(image, tasks);
+    } else {
+      this.fetchTasks();
+    }
   }
 
   render() {
