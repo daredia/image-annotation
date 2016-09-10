@@ -33,17 +33,22 @@ export default class App extends React.Component {
     });
   }
 
+  handleSubmit(e) {
+    // on submit, need to issue PUT request and update the task in db
+    e.preventDefault(e);
+    console.log('handleSubmit called');
+
+  }
+
   render() {
     this.createAnnotator();
     return (
-      <div>
-        <div>
+        <form onSubmit={this.handleSubmit} >
           <textarea id="annotation_data" name="annotation" rows="30" cols="50" readOnly></textarea>
-        </div>
-        <div>
-          <input id="reset_button" type="reset" />
-        </div>
-      </div>
+          <div>
+            <input id="submit_button" type="submit" />
+          </div>
+        </form>
     );
   }
 }
