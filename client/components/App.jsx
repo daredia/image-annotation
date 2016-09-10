@@ -5,7 +5,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif"
+      image: "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif",
+      annotation: ''
     };
   }
 
@@ -18,15 +19,19 @@ export default class App extends React.Component {
     .then((res) => {
       console.log(res);
       this.setState({ image: res.data[0].attachment })
+      this.createAnnotator();
     });
   }
 
   createAnnotator() {
     $('.image_frame').remove();
+    var that = this;
     var editor = new BBoxAnnotator({
       url: this.state.image,
       onchange: function(annotation) {
-        $("#annotation_data").val(JSON.stringify(annotation));
+        that.setState({
+          annotation: JSON.stringify(annotation)
+        });
       },
       input_method: 'select',
       labels: ['girl', 'IE man']
@@ -34,17 +39,27 @@ export default class App extends React.Component {
   }
 
   handleSubmit(e) {
-    // on submit, need to issue PUT request and update the task in db
+    // on submit, need to issue PUT request and update the task in db to completed (if value is not empty array)
+    // then POST the callbackurl
+    // unshift the array and if there are none left, GET more tasks from server
     e.preventDefault(e);
-    console.log('handleSubmit called');
-
+    console.log('handleSubmit called:', this.state.annotation);
+    this.setState({
+      annotation: ''
+    })
   }
 
   render() {
-    this.createAnnotator();
     return (
-        <form onSubmit={this.handleSubmit} >
-          <textarea id="annotation_data" name="annotation" rows="30" cols="50" readOnly></textarea>
+        <form onSubmit={this.handleSubmit.bind(this)} >
+          <textarea 
+            value={this.state.annotation}
+            id="annotation_data"
+            name="annotation" 
+            rows="30" 
+            cols="50" 
+            readOnly>
+          </textarea>
           <div>
             <input id="submit_button" type="submit" />
           </div>
