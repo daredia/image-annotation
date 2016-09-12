@@ -40,12 +40,41 @@ router.route('/annotation/:id')
   .put(function(req, res) {
     Task.findByIdAndUpdate(req.params.id, 
       { $set: { status: 'completed' } }, { new: true },
-      function(err, task) {
+      function(err, foundTask) {
         if (err) {
           return res.send(err);
         }
 
-        axios.post(task.callback_url, task, {
+        var response = {
+          status_code: '200',
+          annotation: JSON.parse(req.body.annotation)
+        };
+
+        var task = {
+          completed_at: foundTask.updatedAt,
+          response: response,
+          created_at: foundTask.createdAt,
+          callback_url: foundTask.callback_url,
+          type: 'annotation',
+          status: foundTask.status,
+          instruction: foundTask.instruction,
+          urgency: 'day',
+          params: {
+            attachment_type: foundTask.attachment_type,
+            attachment: foundTask.attachment,
+            objects_to_annotate: foundTask.objects_to_annotate,
+            with_labels: foundTask.with_labels
+          },
+          task_id: foundTask._id
+        };
+
+        var body = {
+          task_id: foundTask._id,
+          response: response,
+          task: task
+        };
+
+        axios.post(task.callback_url, body, {
           auth: {
             username: 'my_api_key'
           }

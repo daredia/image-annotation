@@ -75,7 +75,7 @@ export default class App extends React.Component {
         }
       })
       .then((res) => {
-        console.log('response from put:', res);
+        console.dir(res);
         let tasks = this.state.tasks.splice(1);
         let image;
         if (tasks.length) {
