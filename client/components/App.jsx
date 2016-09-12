@@ -60,7 +60,6 @@ export default class App extends React.Component {
   }
 
   handleSubmit(e) {
-    // POST the callbackurl
     e.preventDefault(e);
     if (this.state.annotation && this.state.annotation !== '[]') {
       console.log('handleSubmit called:', this.state.annotation);
@@ -76,7 +75,7 @@ export default class App extends React.Component {
         }
       })
       .then((res) => {
-        console.log('res:', res);
+        console.log('response from put:', res);
         let tasks = this.state.tasks.splice(1);
         let image;
         if (tasks.length) {
@@ -116,6 +115,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-
-  

@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var validUrl = require('valid-url');
+var axios = require('axios');
 var Task = require('../db');
 var middleware = require('../middleware');
 
@@ -37,12 +38,32 @@ router.route('/annotation')
 
 router.route('/annotation/:id')
   .put(function(req, res) {
-    Task.update({ _id: req.params.id }, 
-      { $set: { status: 'completed' } },
-      function(err, raw) {
-        (err) ? res.send(err) : res.sendStatus(200);
+    Task.findByIdAndUpdate(req.params.id, 
+      { $set: { status: 'completed' } }, { new: true },
+      function(err, task) {
+        if (err) {
+          return res.send(err);
+        }
+
+        axios.post(task.callback_url, task, {
+          auth: {
+            username: 'my_api_key'
+          }
+        })
+        // TODO: remove the .then()
+        .then((response) => res.status(200).json(JSON.parse(response.config.data)))
+        .catch((err) => console.log(err));
+
+        // res.sendStatus(200);
       }
     );
+  }
+);
+
+// for testing purposes
+router.route('/callback')
+  .post(function(req, res) {
+    res.status(200).json(req.body.data);
   }
 );
 
