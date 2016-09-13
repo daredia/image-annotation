@@ -7,7 +7,7 @@
       if (options == null) {
         options = {};
       }
-      options.input_method || (options.input_method = "text");
+      options.input_method || (options.input_method = "fixed");
       this.image_frame = image_frame;
       this.border_width = options.border_width || 2;
       this.selector = $('<div class="bbox_selector"></div>');
@@ -111,10 +111,14 @@
       this.label_box.hide();
       this.selector.hide();
       data = this.rectangle();
-      data.label = $.trim(this.label_input.val().toLowerCase());
+      
       if (options.input_method !== 'fixed') {
+        data.label = $.trim(this.label_input.val().toLowerCase());
         this.label_input.val('');
+      } else {
+        data.label = null;
       }
+
       return data;
     };
 
@@ -236,7 +240,7 @@
         switch (status) {
           case 'input':
             data = selector.finish(options);
-            if (data.label) {
+            if (data.label || options.input_method === 'fixed') {
               annotator.add_entry(data);
               if (annotator.onchange) {
                 annotator.onchange(annotator.entries);
@@ -318,7 +322,7 @@
       text_box = $('<div></div>').appendTo(box_element).css({
         "overflow": "hidden"
       });
-      if (this.show_label) {
+      if (this.show_label && entry.label) {
         text_box.text(entry.label);
       }
       annotator = this;

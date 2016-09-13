@@ -52,9 +52,12 @@ export default class App extends React.Component {
           annotation: JSON.stringify(annotation)
         });
       },
-      input_method: 'select',
-      labels: JSON.parse(labels)
     };
+
+    if (tasks.length && tasks[0].with_labels) {
+      options.input_method = 'select';
+      options.labels = JSON.parse(labels);
+    }
     
     let editor = new BBoxAnnotator(options);
   }
@@ -100,6 +103,8 @@ export default class App extends React.Component {
   render() {
     return (
         <form onSubmit={this.handleSubmit.bind(this)} >
+          <p>{(this.state.tasks.length) ? 'Instructions: ' + this.state.tasks[0].instruction : 'You\'re done!' }</p>
+          <p>{(this.state.tasks.length) ? 'Objects to annotate: ' + this.state.tasks[0].objects_to_annotate : 'Refresh the page to see any new tasks'}</p>
           <textarea 
             value={this.state.annotation}
             id="annotation_data"
