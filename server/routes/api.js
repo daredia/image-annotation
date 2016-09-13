@@ -25,6 +25,7 @@ router.route('/annotation')
       return res.sendStatus(400);
     }
     
+    // convert objects list to valid JSON
     task.objects_to_annotate = task.objects_to_annotate.replace(/\'/g, '"');
     if (!Array.isArray(JSON.parse(task.objects_to_annotate))) {
       return res.sendStatus(400);
@@ -79,11 +80,8 @@ router.route('/annotation/:id')
             username: 'my_api_key'
           }
         })
-        // TODO: remove the .then()
-        .then((response) => res.status(200).json(JSON.parse(response.config.data)))
         .catch((err) => console.log(err));
-
-        // res.sendStatus(200);
+        res.sendStatus(200);
       }
     );
   }

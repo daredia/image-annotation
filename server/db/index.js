@@ -17,6 +17,7 @@ var TaskSchema = new Schema({
   }
 );
 
+// CONNECT TO DB =========================================
 mongoose.connect('mongodb://localhost/image-annotation');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error'));

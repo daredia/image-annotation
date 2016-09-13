@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 
-const loadingImage = "http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif";
 const doneImage = 'http://actusperformance.com/wp-content/uploads/2015/06/ID-100288828_DONE.jpg';
 
 export default class App extends React.Component {
@@ -9,7 +8,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       tasks: [],
-      image: loadingImage,
+      image: null,
       annotation: ''
     };
   }
@@ -25,12 +24,8 @@ export default class App extends React.Component {
       }
     })
     .then((res) => {
-      console.log(res);
-      if (res.data.length) {
-        this.setState({ tasks: res.data, image: res.data[0].attachment });
-      } else {
-        this.setState({ tasks: res.data, image: doneImage });
-      }
+      let image = (res.data.length) ? res.data[0].attachment : doneImage;
+      this.setState({ tasks: res.data, image: image });
       this.updateImage();
     })
     .catch((err) => console.log(err));
@@ -41,16 +36,16 @@ export default class App extends React.Component {
     tasks = tasks || this.state.tasks;
 
     $('.image_frame').remove();
-    let labels = (tasks.length) ? tasks[0].objects_to_annotate : '[]'
+    let labels = (tasks.length) ? tasks[0].objects_to_annotate : '[]';
     let that = this;
     
     let options = {
       url: image,
-      onchange: function(annotation) {
+      onchange: (annotation) => {
         that.setState({
           annotation: JSON.stringify(annotation)
         });
-      },
+      }
     };
 
     if (tasks.length && tasks[0].with_labels) {
@@ -101,21 +96,19 @@ export default class App extends React.Component {
 
   render() {
     return (
-        <form onSubmit={this.handleSubmit.bind(this)} >
-          <p>{(this.state.tasks.length) ? 'Instructions: ' + this.state.tasks[0].instruction : 'You\'re done!' }</p>
-          <p>{(this.state.tasks.length) ? 'Objects to annotate: ' + this.state.tasks[0].objects_to_annotate : 'Refresh the page to see any new tasks'}</p>
-          <textarea 
-            value={this.state.annotation}
-            id="annotation_data"
-            name="annotation" 
-            rows="30" 
-            cols="50" 
-            readOnly>
-          </textarea>
-          <div>
-            <input id="submit_button" type="submit" />
-          </div>
-        </form>
+      <form onSubmit={this.handleSubmit.bind(this)} >
+        <p>{(this.state.tasks.length) ? 'Instructions: ' + this.state.tasks[0].instruction : 'You\'re done!' }</p>
+        <p>{(this.state.tasks.length) ? 'Objects to annotate: ' + this.state.tasks[0].objects_to_annotate : 'Refresh the page to see any new tasks'}</p>
+        <textarea 
+          value={this.state.annotation}
+          id="annotation_data"
+          name="annotation" 
+          rows="30" 
+          cols="50" 
+          readOnly>
+        </textarea>
+        <div><input id="submit_button" type="submit" /></div>
+      </form>
     );
   }
 }
