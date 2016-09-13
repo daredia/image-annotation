@@ -15,7 +15,6 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    this.updateImage();
     this.fetchTasks();
   }
 
@@ -57,6 +56,8 @@ export default class App extends React.Component {
     if (tasks.length && tasks[0].with_labels) {
       options.input_method = 'select';
       options.labels = JSON.parse(labels);
+    } else {
+      options.input_method = 'fixed';
     }
     
     let editor = new BBoxAnnotator(options);
@@ -65,7 +66,6 @@ export default class App extends React.Component {
   handleSubmit(e) {
     e.preventDefault(e);
     if (this.state.annotation && this.state.annotation !== '[]') {
-      console.log('handleSubmit called:', this.state.annotation);
 
       let url = 'http://localhost:4567/v1/task/annotation/';
       url += this.state.tasks[0]._id;
@@ -78,7 +78,6 @@ export default class App extends React.Component {
         }
       })
       .then((res) => {
-        console.dir(res);
         let tasks = this.state.tasks.splice(1);
         let image;
         if (tasks.length) {

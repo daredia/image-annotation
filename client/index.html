@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Image Annotation API</title>
   <link rel="stylesheet" href="flexboxgrid/dist/flexboxgrid.min.css">
+  <link rel="stylesheet" href="styles.css">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script>
   <script src="bbox_annotator.js"></script>
@@ -15,7 +16,9 @@
         <div id="app">Welcome to the Image Annotation API</div>
       </div>
       <div class="start-xs col-xs-8">
-        <div id="bbox_annotator"></div>
+        <div id="bbox_annotator">
+          <div class="image_frame">
+        </div>
         <input id="annotation_data" name="annotation_data" type="hidden" />
       </div>
     </div>

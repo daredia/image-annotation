@@ -1,0 +1,7 @@
+.image_frame {
+  background-image: url('http://blog.teamtreehouse.com/wp-content/uploads/2015/05/InternetSlowdown_Day.gif');
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 300px;
+  position: relative;
+}

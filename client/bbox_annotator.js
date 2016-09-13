@@ -115,10 +115,7 @@
       if (options.input_method !== 'fixed') {
         data.label = $.trim(this.label_input.val().toLowerCase());
         this.label_input.val('');
-      } else {
-        data.label = null;
       }
-
       return data;
     };
 
@@ -322,7 +319,7 @@
       text_box = $('<div></div>').appendTo(box_element).css({
         "overflow": "hidden"
       });
-      if (this.show_label && entry.label) {
+      if (this.show_label) {
         text_box.text(entry.label);
       }
       annotator = this;
