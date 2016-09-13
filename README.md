@@ -9,7 +9,10 @@ npm install
 npm start
 ```
 
-Import and run these [Postman requests](https://www.getpostman.com/collections/a350064c726d10d2e4f3) to populate the db with sample tasks.
+Import and run these [Postman requests](https://www.getpostman.com/collections/6accabf871dada638334) to populate the db with sample tasks. 
+- The first request creates a task with `with_labels` set to `false`
+- The second request creates a task with `with_labels` set to `true`
+- The third request fetches all `pending` tasks from the db
 
 Then visit localhost on port 4567 to access the admin panel. 
 
