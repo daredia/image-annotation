@@ -1,5 +1,5 @@
 # image-annotation
-  > Image annotation endpoint and admin panel
+  > MVP for an image annotation endpoint and admin panel
   
 ## Getting Started
 
